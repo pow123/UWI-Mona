@@ -1,0 +1,510 @@
+---
+title: "Introduction to R"
+author: "Data Carpentry contributors"
+minutes: 45
+layout: topic
+---
+
+```{r, echo=FALSE, purl=FALSE}
+knitr::opts_chunk$set(results='hide', fig.path='img/r-lesson-')
+```
+
+------------
+
+> ## Learning Objectives
+>
+> * Assign names to objects in R with <- and =.
+> * Solve mathematical operations in R.
+> * Describe what a function is in R.
+> * Describe what vectors are and how they can be manipulated in R.
+> * Inspect the content of vectors in R and describe their content with class and str.
+
+------------
+
+## The R syntax
+
+_Start by showing an example of a script_
+
+* Point to the different parts:
+  - a function
+  - the assignment operator `<-`
+  - the `=` for arguments
+  - the comments `#` and how they are used to document function and its content
+  - the `$` operator
+* Point to indentation and consistency in spacing to improve clarity
+
+
+## Creating objects
+
+```{r, echo=FALSE, purl=TRUE}
+### Creating objects (assignments)
+```
+
+You can get an output from R simply by typing in math in the console
+
+```{r, purl=FALSE}
+3 + 5
+12/7
+```
+
+We can also comment on what it is that we're doing
+
+```{r, purl=FALSE}
+# I'm adding 3 and 5. R is fun!
+3+5
+```
+
+What happens if we type that same command without the # sign in the front?
+
+```{r, purl=FALSE, eval=FALSE}
+I'm adding 3 and 5. R is fun!
+3+5
+```
+
+Now R is trying to run that sentence as a command, and it
+doesn't work. Now we're stuck over in the console. The
+`+` sign means that it's still waiting for input, so we
+can't type in a new command. To get out of this press the <kbd>Esc</kbd> key. This will work whenever you're stuck with that `+` sign.
+
+It's great that R is a glorified caluculator, but obviously
+we want to do more interesting things.
+
+To do useful and interesting things, we need to assign _values_ to
+_objects_. To create objects, we need to give it a name followed by the
+assignment operator `<-` and the value we want to give it.
+
+For instance, instead of adding 3 + 5, we can assign those
+values to objects and then add them.
+
+```{r, purl=FALSE}
+# assign 3 to a
+a <- 3
+# assign 5 to b
+b <- 5
+
+# what now is a
+a
+# what now is b
+b
+
+#Add a and b
+a + b
+```
+
+`<-` is the assignment operator. It assigns values on the right to objects on
+the left. So, after executing `x <- 3`, the value of `x` is `3`. The arrow can
+be read as 3 **goes into** `x`.  You can also use `=` or `->`for assignments but not in
+all contexts so it is good practice to use `<-` for assignments. `=` should only
+be used to specify the values of arguments in functions, see below.
+
+In RStudio, typing <kbd>Alt</kbd> + <kbd>-</kbd> (push <kbd>Alt</kbd> at the same time as the <kbd>-</kbd> key) will write ` <- ` in a single keystroke.
+
+### Exercise
+
+- What happens if we change `a` and then re-add `a` and `b`?
+- Does it work if you just change `a` in the script and then add `a` and `b`? Did you still get the same answer after they changed `a`? If so, why do you think that might be?
+- We can also assign a + b to a new variable, `c`. How would you do this?
+
+## Notes on objects
+
+Objects can be given any name such as `x`, `current_temperature`, or
+`subject_id`. You want your object names to be explicit and not too long. They
+cannot start with a number (`2x` is not valid but `x2` is). R is case sensitive
+(e.g., `Genome_length_mb` is different from `genome_length_mb`). There are some names that
+cannot be used because they represent the names of fundamental functions in R
+(e.g., `if`, `else`, `for`, see
+[here](https://stat.ethz.ch/R-manual/R-devel/library/base/html/Reserved.html)
+for a complete list). In general, even if it's allowed, it's best to not use
+other function names (e.g., `c`, `T`, `mean`, `data`, `df`, `weights`). When in
+doubt, check the help to see if the name is already in use. It's also best to avoid
+dots (`.`) within a variable name as in `my.dataset`. There are many functions
+in R with dots in their names for historical reasons, but because dots have a
+special meaning in R (for methods) and other programming languages, it's best to
+avoid them. It is also recommended to use nouns for variable names, and verbs
+for function names. It's important to be consistent in the styling of your code
+(where you put spaces, how you name variables, etc.). In R, two popular style
+guides are [Hadley Wickham's](http://adv-r.had.co.nz/Style.html) and
+[Google's](https://google.github.io/styleguide/Rguide.xml).
+
+When assigning a value to an object, R does not print anything. You can force to
+print the value by using parentheses or by typing the name:
+
+```{r}
+# Assigns a value to a variable
+genome_size_mb <- 35
+
+# Assigns a value to a variable and prints it out on the console
+(genome_size_mb <- 35)
+
+# Prints out the value of a variable on the console
+genome_size_mb
+```
+
+## Functions
+
+The other key feature of R are functions. These are R's built in capabilities. Some examples of these are mathematical functions, like
+`sqrt` and `round`. You can also get functions from libraries (which we'll talk about in a bit), or even write your own.
+
+Functions are "canned scripts" that automate something complicated or convenient
+or both.  Many functions are predefined, or become available when using the
+function `library()` (more on that later). A function usually gets one or more
+inputs called *arguments*. Functions often (but not always) return a *value*. A
+typical example would be the function `sqrt()`. The input (the argument) must be
+a number, and the return value (in fact, the output) is the square root of that
+number. Executing a function ('running it') is called *calling* the function. An
+example of a function call is:
+
+`sqrt(a)`
+
+Here, the value of `a` is given to the `sqrt()` function, the `sqrt()` function
+calculates the square root. This function is very simple, because it takes just one
+argument.
+
+The return 'value' of a function need not be numerical (like that of `sqrt()`),
+and it also does not need to be a single item: it can be a set of things, or
+even a data set. We'll see that when we read data files in to R.
+
+Arguments can be anything, not only numbers or filenames, but also other
+objects. Exactly what each argument means differs per function, and must be
+looked up in the documentation (see below). If an argument alters the way the
+function operates, such as whether to ignore 'bad values', such an argument is
+sometimes called an *option*.
+
+Most functions can take several arguments, but many have so-called *defaults*.
+If you don't specify such an argument when calling the function, the function
+itself will fall back on using the *default*. This is a standard value that the
+author of the function specified as being "good enough in standard cases". An
+example would be what symbol to use in a plot. However, if you want something
+specific, simply change the argument yourself with a value of your choice.
+
+Let's try a function that can take multiple arguments `round`.
+
+```{r, results='show'}
+round(3.14159)
+```
+
+We can see that we get `3`. That's because the default is to round
+to the nearest whole number. If we want more digits we can see
+how to do that by getting information about the `round` function.
+We can use `args(round)` or look at the
+help for this function using `?round`.
+
+```{r, results='show'}
+args(round)
+```
+
+```{r, eval=FALSE}
+?round
+```
+
+
+We see that if we want a different number of digits, we can
+type `digits=2` or however many we want.
+
+```{r, results='show'}
+round(3.14159, digits=2)
+```
+
+If you provide the arguments in the exact same order as they are defined you don't have to name them:
+
+```{r, results='show'}
+round(3.14159, 2)
+```
+
+However, it's usually not recommended practice because it's a lot of remembering
+to do, and if you share your code with others that includes less known functions
+it makes your code difficult to read. (It's however OK to not include the names
+of the arguments for basic functions like `mean`, `min`, etc...)
+
+Another advantage of naming arguments, is that the order doesn't matter.
+This is useful when there start to be more arguments.
+
+
+### Exercise
+
+We're going to work with genome lengths.
+- Create a variable `genome_length_mb` and assign it the value `4.6`
+
+#### Solution
+
+```{r, purl=FALSE}
+genome_length_mb <- 4.6
+genome_length_mb
+```
+
+### Exercise
+
+Now that R has `genome_length_mb` in memory, we can do arithmetic with it. For
+instance, we may want to convert this to the weight of the genome in
+picograms (for some reason). 978Mb = 1picogram. Divide the
+genome length in Mb by 978.
+
+#### Solution
+
+```{r, purl=FALSE}
+genome_length_mb / 978.0
+```
+
+It turns out an E. coli genome doesn't weigh very much.
+
+### Exercise
+
+We can also change the variable's value by assigning it a new one. Say
+we want to think about a human genome rather than E. coli. Change `genome_length_mb` to 3000 and figure out the weight of the human
+genome.
+
+#### Solution
+
+```{r, purl=FALSE}
+genome_length_mb <- 3000.0
+genome_length_mb / 978.0
+```
+
+This means that assigning a value to one variable does not change the values of
+other variables.  For example, let's store the genome's weight in a variable.
+
+```{r, purl=FALSE}
+genome_weight_pg <- genome_length_mb / 978.0
+```
+
+and then change `genome_length_mb` to 100.
+
+```{r, purl=FALSE}
+genome_length_mb <- 100
+```
+
+### Exercise
+
+What do you think is the current content of the object `genome_weight_pg`? 3.06 or 0.102?
+
+
+## Vectors and data types
+
+```{r, echo=FALSE, purl=TRUE}
+### Vectors and data types
+```
+
+A vector is the most common and basic data structure in R, and is pretty much
+the workhorse of R. It's basically just a list of values, mainly either numbers or
+characters. They're special lists that you can do math with. You can assign this list of values to a variable, just like you
+would for one item. For example we can create a vector of genome lengths:
+
+```{r, purl=FALSE}
+glengths <- c(4.6, 3000, 50000)
+glengths
+```
+
+A vector can also contain characters:
+
+```{r, purl=FALSE}
+species <- c("ecoli", "human", "corn")
+species
+```
+
+There are many functions that allow you to inspect the content of a
+vector. `length()` tells you how many elements are in a particular vector:
+
+```{r, purl=FALSE}
+length(glengths)
+length(species)
+```
+
+
+You can also do math with whole vectors. For instance if we wanted to multiply the genome lengths of all the genomes in the list, we can do
+
+```{r, purl=FALSE}
+5 * glengths
+```
+
+or we can add the data in the two vectors together
+
+```{r, purl=FALSE}
+new_lengths <- glengths + glengths
+new_lengths
+```
+
+This is very useful if we have data in different vectors that we
+want to combine or work with.
+
+There are few ways to figure out what's going on in a vector.
+
+`class()` indicates the class (the type of element) of an object:
+
+```{r, purl=FALSE}
+class(glengths)
+class(species)
+```
+
+The function `str()` provides an overview of the object and the elements it
+contains. It is a really useful function when working with large and complex
+objects:
+
+```{r, purl=FALSE}
+str(glengths)
+str(species)
+```
+
+You can add elements to your vector simply by using the `c()` function:
+
+```{r, purl=FALSE}
+lengths <- c(glengths, 90) # adding at the end
+lengths <- c(30, glengths) # adding at the beginning
+lengths
+```
+
+What happens here is that we take the original vector `glengths`, and we are
+adding another item first to the end of the other ones, and then another item at
+the beginning. We can do this over and over again to build a vector or a
+dataset. As we program, this may be useful to autoupdate results that we are
+collecting or calculating.
+
+We just saw 2 of the 6 **data types** that R uses: `"character"` and
+`"numeric"`. The other 4 are:       
+
+* `"logical"` for `TRUE` and `FALSE` (the boolean data type)
+* `"integer"` for integer numbers (e.g., `2L`, the `L` indicates to R that it's an integer)
+* `"complex"` to represent complex numbers with real and imaginary parts (e.g.,
+  `1+4i`) and that's all we're going to say about them
+* `"raw"` that we won't discuss further
+
+Vectors are one of the many **data structures** that R uses. Other important
+ones are lists (`list`), matrices (`matrix`), data frames (`data.frame`) and
+factors (`factor`).
+
+
+## Seeking help
+
+### I know the name of the function I want to use, but I'm not sure how to use it
+
+If you need help with a specific function, let's say `barplot()`, you can type:
+
+```{r, eval=FALSE}
+?barplot
+```
+
+If you just need to remind yourself of the names of the arguments, you can use:
+
+```{r, eval=FALSE}
+args(lm)
+```
+
+If the function is part of a package that is installed on your computer but
+don't remember which one, you can type:
+
+```{r, eval=FALSE}
+??geom_point
+```
+
+### I want to use a function that does X, there must be a function for it but I don't know which one...
+
+If you are looking for a function to do a particular task, you can use
+`help.search()` (but only looks through the installed packages):
+
+```{r, eval=FALSE}
+help.search("kruskal")
+```
+
+If you can't find what you are looking for, you can use the
+[rdocumention.org](http://www.rdocumentation.org) website that search through
+the help files across all packages available.
+
+### I am stuck... I get an error message that I don't understand
+
+Start by googling the error message. However, this doesn't always work very well
+because often, package developers rely on the error catching provided by R. You
+end up with general error messages that might not be very helpful to diagnose a
+problem (e.g. "subscript out of bounds").
+
+However, you should check [stackoverflow.com](https://stackoverflow.com). Search
+using the `[r]` tag. Most questions have already been answered, but the
+challenge is to use the right words in the search to find the answers:
+[http://stackoverflow.com/questions/tagged/r](http://stackoverflow.com/questions/tagged/r)
+
+The [Introduction to R](http://cran.r-project.org/doc/manuals/R-intro.pdf) can
+also be dense for people with little programming experience but it is a good
+place to understand the underpinnings of the R language.
+
+The [R FAQ](http://cran.r-project.org/doc/FAQ/R-FAQ.html) is dense and technical
+but it is full of useful information.
+
+### Asking for help
+
+The key to get help from someone is for them to grasp your problem rapidly. You
+should make it as easy as possible to pinpoint where the issue might be.
+
+Try to use the correct words to describe your problem. For instance, a package
+is not the same thing as a library. Most people will understand what you meant,
+but others have really strong feelings about the difference in meaning. The key
+point is that it can make things confusing for people trying to help you. Be as
+precise as possible when describing your problem
+
+If possible, try to reduce what doesn't work to a simple reproducible
+example. If you can reproduce the problem using a very small `data.frame`
+instead of your 50,000 rows and 10,000 columns one, provide the small one with
+the description of your problem. When appropriate, try to generalize what you
+are doing so even people who are not in your field can understand the question.
+
+To share an object with someone else, if it's relatively small, you can use the
+function `dput()`. It will output R code that can be used to recreate the exact same
+object as the one in memory:
+
+```{r, results='show'}
+dput(head(iris)) # iris is an example data.frame that comes with R
+```
+
+If the object is larger, provide either the raw file (i.e., your CSV file) with
+your script up to the point of the error (and after removing everything that is
+not relevant to your issue). Alternatively, in particular if your questions is
+not related to a `data.frame`, you can save any R object to a file. Note: for this
+example, the folder "/tmp" needs to already exist.
+
+```{r, eval=FALSE}
+saveRDS(iris, file="/tmp/iris.rds")
+```
+
+The content of this file is however not human readable and cannot be posted
+directly on stackoverflow. It can however be sent to someone by email who can read
+it with this command:
+
+```{r, eval=FALSE}
+some_data <- readRDS(file="~/Downloads/iris.rds")
+```
+
+Last, but certainly not least, **always include the output of `sessionInfo()`**
+as it provides critical information about your platform, the versions of R and
+the packages that you are using, and other information that can be very helpful
+to understand your problem.
+
+```{r, results='show'}
+sessionInfo()
+```
+
+### Where to ask for help?
+
+* Your friendly colleagues: if you know someone with more experience than you,
+  they might be able and willing to help you.
+* Stackoverflow: if your question hasn't been answered before and is well
+  crafted, chances are you will get an answer in less than 5 min.
+* The [R-help](https://stat.ethz.ch/mailman/listinfo/r-help): it is read by a
+  lot of people (including most of the R core team), a lot of people post to it,
+  but the tone can be pretty dry, and it is not always very welcoming to new
+  users. If your question is valid, you are likely to get an answer very fast
+  but don't expect that it will come with smiley faces. Also, here more than
+  everywhere else, be sure to use correct vocabulary (otherwise you might get an
+  answer pointing to the misuse of your words rather than answering your
+  question). You will also have more success if your question is about a base
+  function rather than a specific package.
+* If your question is about a specific package, see if there is a mailing list
+  for it. Usually it's included in the DESCRIPTION file of the package that can
+  be accessed using `packageDescription("name-of-package")`. You may also want
+  to try to email the author of the package directly.
+* There are also some topic-specific mailing lists (GIS, phylogenetics, etc...),
+  the complete list is [here](http://www.r-project.org/mail.html).
+
+### More resources
+
+* The [Posting Guide](http://www.r-project.org/posting-guide.html) for the R
+  mailing lists.
+* [How to ask for R help](http://blog.revolutionanalytics.com/2014/01/how-to-ask-for-r-help.html)
+  useful guidelines
+
