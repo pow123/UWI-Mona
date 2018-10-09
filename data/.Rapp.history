@@ -1,0 +1,64 @@
+age <- 45
+length(age)
+str(age)
+is.integer(age)
+typeof(age)
+typeof(is.integer(score))
+typeof(is.integer(age))
+score <- c(1,4,3)
+length(score)
+str(score)
+is.integer(score)
+typeof(score)
+typeof(is.integer(score))
+getwd()
+setwd("~UWI-Mona/UWI-curriculum/contents/data/")
+getwd()
+cdata <- read.csv("countries-BMI-1.0.csv", skip = 2, header = F)
+cdata(1,1)
+cdata$(1,1)
+cdata$1,1
+cdata[1,1]
+print(cdata[4,1])
+x <- cdata[1,1]
+x
+x <- cdata[4,4]
+x
+cdata[10,10]
+rm(x)
+x
+x <- 2 + cdata[15,15]
+cdata[15,15]
+cdata[[5,1]]
+str(cdata)
+typeof(cdata)
+cdata[,c(3,5)]
+cdata[[1,1]]
+cdata[(5,5),(5,5)]
+head(cdata[,c(3,5)])
+head(cdata[,5])
+head(cdata[,3], 1)
+unique(cdata[,1])
+cdata[cdata$V1=="Sweden",]
+cdata[cdata$V1=="Sweden",2:3]
+cdata[,1]
+head(read.csv("jamaica-worldbank-data.csv", header =T))
+head(read.csv("jamaica-worldbank-data.csv", header =T), ncolumns = 5)
+head(read.csv("jamaica-worldbank-data.csv", header =T)[1:5,])
+head(read.csv("jamaica-worldbank-data.csv", header =T)[,1:5])
+head(read.csv("jamaica-worldbank-data.csv", header =T)[,1:7])
+=source("reshape_jamaica_data.R")
+source("reshape_jamaica_data.R")
+getwd()
+setwd("../..")
+getwd()
+setwd("../..")
+getwd()
+setwd("../Downloads")
+getwd()
+source("reshape_jamaica_data.R")
+setwd("../Desktop")
+source("reshape_jamaica_data.R")
+setwd("~UWI-Mona/UWI-curriculum/contents/data/")
+source("reshape_jamaica_data.R")
+source("reshape_jamaica_data.R")

@@ -1,0 +1,386 @@
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+<head>
+
+<meta charset="utf-8" />
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="generator" content="pandoc" />
+
+
+<meta name="author" content="Peace Ossom-Williamson" />
+
+
+<title>The Data 'Shop: Data Science Crash Course for Libraries</title>
+
+<script src="site_libs/jquery-1.11.3/jquery.min.js"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link href="site_libs/bootstrap-3.3.5/css/bootstrap.min.css" rel="stylesheet" />
+<script src="site_libs/bootstrap-3.3.5/js/bootstrap.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/respond.min.js"></script>
+<script src="site_libs/jqueryui-1.11.4/jquery-ui.min.js"></script>
+<link href="site_libs/tocify-1.9.1/jquery.tocify.css" rel="stylesheet" />
+<script src="site_libs/tocify-1.9.1/jquery.tocify.js"></script>
+<script src="site_libs/navigation-1.1/tabsets.js"></script>
+<link href="site_libs/font-awesome-4.5.0/css/font-awesome.min.css" rel="stylesheet" />
+
+
+
+
+<style type="text/css">
+h1 {
+  font-size: 34px;
+}
+h1.title {
+  font-size: 38px;
+}
+h2 {
+  font-size: 30px;
+}
+h3 {
+  font-size: 24px;
+}
+h4 {
+  font-size: 18px;
+}
+h5 {
+  font-size: 16px;
+}
+h6 {
+  font-size: 12px;
+}
+.table th:not([align]) {
+  text-align: left;
+}
+</style>
+
+<link rel="stylesheet" href="style.css" type="text/css" />
+
+</head>
+
+<body>
+
+<style type = "text/css">
+.main-container {
+  max-width: 940px;
+  margin-left: auto;
+  margin-right: auto;
+}
+code {
+  color: inherit;
+  background-color: rgba(0, 0, 0, 0.04);
+}
+img {
+  max-width:100%;
+  height: auto;
+}
+.tabbed-pane {
+  padding-top: 12px;
+}
+button.code-folding-btn:focus {
+  outline: none;
+}
+</style>
+
+
+<style type="text/css">
+/* padding for bootstrap navbar */
+body {
+  padding-top: 51px;
+  padding-bottom: 40px;
+}
+/* offset scroll position for anchor links (for fixed navbar)  */
+.section h1 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+
+.section h2 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.section h3 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.section h4 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.section h5 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.section h6 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+</style>
+
+<script>
+// manage active state of menu based on current page
+$(document).ready(function () {
+  // active menu anchor
+  href = window.location.pathname
+  href = href.substr(href.lastIndexOf('/') + 1)
+  if (href === "")
+    href = "index.html";
+  var menuAnchor = $('a[href="' + href + '"]');
+
+  // mark it active
+  menuAnchor.parent().addClass('active');
+
+  // if it's got a parent navbar menu mark it active as well
+  menuAnchor.closest('li.dropdown').addClass('active');
+});
+</script>
+
+
+<div class="container-fluid main-container">
+
+<!-- tabsets -->
+<script>
+$(document).ready(function () {
+  window.buildTabsets("TOC");
+});
+</script>
+
+<!-- code folding -->
+
+
+
+
+<script>
+$(document).ready(function ()  {
+
+    // move toc-ignore selectors from section div to header
+    $('div.section.toc-ignore')
+        .removeClass('toc-ignore')
+        .children('h1,h2,h3,h4,h5').addClass('toc-ignore');
+
+    // establish options
+    var options = {
+      selectors: "h1,h2,h3",
+      theme: "bootstrap3",
+      context: '.toc-content',
+      hashGenerator: function (text) {
+        return text.replace(/[.\\/?&!#<>]/g, '').replace(/\s/g, '_').toLowerCase();
+      },
+      ignoreSelector: ".toc-ignore",
+      scrollTo: 0
+    };
+    options.showAndHide = false;
+    options.smoothScroll = true;
+
+    // tocify
+    var toc = $("#TOC").tocify(options).data("toc-tocify");
+});
+</script>
+
+<style type="text/css">
+
+#TOC {
+  margin: 25px 0px 20px 0px;
+}
+@media (max-width: 768px) {
+#TOC {
+  position: relative;
+  width: 100%;
+}
+}
+
+
+.toc-content {
+  padding-left: 30px;
+  padding-right: 40px;
+}
+
+div.main-container {
+  max-width: 1200px;
+}
+
+div.tocify {
+  width: 20%;
+  max-width: 260px;
+  max-height: 85%;
+}
+
+@media (min-width: 768px) and (max-width: 991px) {
+  div.tocify {
+    width: 25%;
+  }
+}
+
+@media (max-width: 767px) {
+  div.tocify {
+    width: 100%;
+    max-width: none;
+  }
+}
+
+.tocify ul, .tocify li {
+  line-height: 20px;
+}
+
+.tocify-subheader .tocify-item {
+  font-size: 0.90em;
+  padding-left: 25px;
+  text-indent: 0;
+}
+
+.tocify .list-group-item {
+  border-radius: 0px;
+}
+
+.tocify-subheader {
+  display: inline;
+}
+.tocify-subheader .tocify-item {
+  font-size: 0.95em;
+}
+
+</style>
+
+<!-- setup 3col/9col grid for toc_float and main content  -->
+<div class="row-fluid">
+<div class="col-xs-12 col-sm-4 col-md-3">
+<div id="TOC" class="tocify">
+</div>
+</div>
+
+<div class="toc-content col-xs-12 col-sm-8 col-md-9">
+
+
+
+
+<div class="navbar navbar-default  navbar-fixed-top" role="navigation">
+  <div class="container">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar">
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="index.html"></a>
+    </div>
+    <div id="navbar" class="navbar-collapse collapse">
+      <ul class="nav navbar-nav">
+          <li><a href="index.html"><b>Home</b></a></li>
+          <li><a href="D1-day1.html">Day 1</a></li>
+          <li><a href="D2-day2.html">Day 2</a></li>
+      </ul>
+      <ul class="nav navbar-nav navbar-right">
+        <li>
+  <a href="https://github.com/pow123/UWI-Mona">
+    <span class="fa fa-github fa-lg"></span>
+     
+  </a>
+</li>
+      </ul>
+    </div><!--/.nav-collapse -->
+  </div><!--/.container -->
+</div><!--/.navbar -->
+
+<div class="fluid-row" id="header">
+
+
+
+<h1 class="title toc-ignore">The DATA 'SHOP: Data Science Crash Course for Libraries</h1>
+<h4 class="author"><em>Peace Ossom-Williamson</em></h4>
+
+</div>
+
+
+<p>
+</p>
+<div style="text-align: center; margin-top: 30px; margin-bottom: 30px;">
+<img src="./img/datashop_uwi-mona_logo.png" />
+</div>
+<p>
+</p>
+<p>This two-day workshop will introduce data literacy elements and skills required for working with data through the research process. Day 1 is focused on data management, including the collection and structuring of data to answer a research question and the services that libraries can provide to support campus data curation. Day 2 is focused on the exploration of data, specifically cleaning and visualizing data. Participants will learn best practices and be introduced to new tools along the way. </p>
+    
+
+
+<div class="row">
+  <div class="col-md-6">
+      <h3><a href="D1-day1.html">Day 1 - Oct 9</a></h3>
+    <table class="table table-striped">
+      <tr> <td>09:00</td>  <td><a href="00-before-we-start.html">Getting Started - Git</a></td> </tr>
+      <tr> <td>09:30</td>  <td><a href="01-research-question.html">Developing the Research Question</a></td> </tr>
+	  <tr> <td>10:30</td>  <td>Break</td> </tr>
+      <tr> <td>10:45</td>  <td><a href="02-starting-with-data.html">Data Fundamentals</a></td> </tr>
+      <tr> <td>12:00</td>  <td>Lunch Break</td> </tr>
+      <tr> <td>1:00</td>  <td><a href="03-working-with-data.html">Working With Data in OpenRefine</a></td></tr>
+      <tr> <td>3:30</td>  <td>Break</td></tr>
+      <tr> <td>3:45</td>  <td><a href="04-data-services.html">Data Services</a></td> </tr>
+      <tr> <td>4:30</td>  <td>Closing</td> </tr>
+    </table>
+  </div>
+  <div class="col-md-6">
+      <h3><a href="D2-day2.html">Day 2 Oct 10</a></h3>
+    <table class="table table-striped">
+      <tr> <td>09:00</td>  <td><a href="11-data-science.html">About Data Science</a></td> </tr>
+        <tr> <td>9:30</td> <td>Break</td> </tr>
+        <tr> <td>9:40</td><td><a href="12-data-cleaning-analytics.html">Data Wrangling in R</a></td> </tr>
+	  <tr> <td>11:20</td>  <td>Break</td> </tr>
+      <tr> <td>11:30</td>  <td><a href="13-data-viz.html">Data Visualization Best Practices</a></td> </tr>
+      <tr> <td>12:00</td>  <td>Lunch Break</td> </tr>
+      <tr> <td>1:00</td>  <td><a href="13-data-viz.html">Data Visualization in Tableau</a></td> </tr>
+        <tr> <td>3:30</td> <td>Break</td></tr>
+      <tr> <td>3:45</td>  <td><a href="00-before-we-start.html">Saving files - Git and GitHub</a></td> </tr>
+      <tr> <td>4:30</td>  <td>Reflections and Closing</td> </tr>
+    </table>
+  </div>
+</div>
+
+<div id="requirements" class="section level1">
+
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+
+    <h2><a href="setup.html">Setup Requirements</a></h2>
+<p>The Data 'Shop's teaching is hands-on, so participants are encouraged to use their own computers to ensure the proper setup of tools for an efficient workflow. <b>These lessons assume no prior knowledge of the skills or tools</b>, but working through this lesson requires working copies of the software described. To most effectively use these materials, please make sure to download the data and install everything before working through this lesson.</p>
+<p>&nbsp;</p>
+    <p>&nbsp;</p>
+<p><a href="http://thedatashop.weebly.com/">The Data 'Shop</a>,
+  2017. <a href="LICENSE.html">License</a>. <a href="CONTRIBUTING.html">Contributing</a>. <br/>
+  Questions?  Feedback?
+  Please <a href="https://github.com/pow123/UWI-Mona/issues/new">file
+  an issue on GitHub</a>. <br/> On
+  Twitter: <a href="https://twitter.com/123POW">@123POW</a></p>
+
+
+
+</div>
+</div>
+
+</div>
+
+<script>
+
+// add bootstrap table styles to pandoc tables
+function bootstrapStylePandocTables() {
+  $('tr.header').parent('thead').parent('table').addClass('table table-condensed');
+}
+$(document).ready(function () {
+  bootstrapStylePandocTables();
+});
+
+
+</script>
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>

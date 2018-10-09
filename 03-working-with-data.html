@@ -1,0 +1,441 @@
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+<head>
+
+<meta charset="utf-8" />
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="generator" content="pandoc" />
+
+
+<meta name="author" content="Peace Ossom-Williamson" />
+
+
+<title>Working with Data</title>
+
+<script src="site_libs/jquery-1.11.3/jquery.min.js"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link href="site_libs/bootstrap-3.3.5/css/bootstrap.min.css" rel="stylesheet" />
+<script src="site_libs/bootstrap-3.3.5/js/bootstrap.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/respond.min.js"></script>
+<script src="site_libs/jqueryui-1.11.4/jquery-ui.min.js"></script>
+<link href="site_libs/tocify-1.9.1/jquery.tocify.css" rel="stylesheet" />
+<script src="site_libs/tocify-1.9.1/jquery.tocify.js"></script>
+<script src="site_libs/navigation-1.1/tabsets.js"></script>
+<link href="site_libs/font-awesome-4.5.0/css/font-awesome.min.css" rel="stylesheet" />
+
+
+<style type="text/css">code{white-space: pre;}</style>
+<style type="text/css">
+div.sourceCode { overflow-x: auto; }
+table.sourceCode, tr.sourceCode, td.lineNumbers, td.sourceCode {
+  margin: 0; padding: 0; vertical-align: baseline; border: none; }
+table.sourceCode { width: 100%; line-height: 100%; }
+td.lineNumbers { text-align: right; padding-right: 4px; padding-left: 4px; color: #aaaaaa; border-right: 1px solid #aaaaaa; }
+td.sourceCode { padding-left: 5px; }
+code > span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code > span.dt { color: #902000; } /* DataType */
+code > span.dv { color: #40a070; } /* DecVal */
+code > span.bn { color: #40a070; } /* BaseN */
+code > span.fl { color: #40a070; } /* Float */
+code > span.ch { color: #4070a0; } /* Char */
+code > span.st { color: #4070a0; } /* String */
+code > span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code > span.ot { color: #007020; } /* Other */
+code > span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code > span.fu { color: #06287e; } /* Function */
+code > span.er { color: #ff0000; font-weight: bold; } /* Error */
+code > span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+code > span.cn { color: #880000; } /* Constant */
+code > span.sc { color: #4070a0; } /* SpecialChar */
+code > span.vs { color: #4070a0; } /* VerbatimString */
+code > span.ss { color: #bb6688; } /* SpecialString */
+code > span.im { } /* Import */
+code > span.va { color: #19177c; } /* Variable */
+code > span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code > span.op { color: #666666; } /* Operator */
+code > span.bu { } /* BuiltIn */
+code > span.ex { } /* Extension */
+code > span.pp { color: #bc7a00; } /* Preprocessor */
+code > span.at { color: #7d9029; } /* Attribute */
+code > span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code > span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code > span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+</style>
+<style type="text/css">
+  pre:not([class]) {
+    background-color: white;
+  }
+</style>
+
+
+<style type="text/css">
+h1 {
+  font-size: 34px;
+}
+h1.title {
+  font-size: 38px;
+}
+h2 {
+  font-size: 30px;
+}
+h3 {
+  font-size: 24px;
+}
+h4 {
+  font-size: 18px;
+}
+h5 {
+  font-size: 16px;
+}
+h6 {
+  font-size: 12px;
+}
+.table th:not([align]) {
+  text-align: left;
+}
+</style>
+
+<link rel="stylesheet" href="style.css" type="text/css" />
+
+</head>
+
+<body>
+
+<style type = "text/css">
+.main-container {
+  max-width: 940px;
+  margin-left: auto;
+  margin-right: auto;
+}
+code {
+  color: inherit;
+  background-color: rgba(0, 0, 0, 0.04);
+}
+img {
+  max-width:100%;
+  height: auto;
+}
+.tabbed-pane {
+  padding-top: 12px;
+}
+button.code-folding-btn:focus {
+  outline: none;
+}
+</style>
+
+
+<style type="text/css">
+/* padding for bootstrap navbar */
+body {
+  padding-top: 51px;
+  padding-bottom: 40px;
+}
+/* offset scroll position for anchor links (for fixed navbar)  */
+.section h1 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+
+.section h2 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.section h3 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.section h4 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.section h5 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.section h6 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+</style>
+
+<script>
+// manage active state of menu based on current page
+$(document).ready(function () {
+  // active menu anchor
+  href = window.location.pathname
+  href = href.substr(href.lastIndexOf('/') + 1)
+  if (href === "")
+    href = "index.html";
+  var menuAnchor = $('a[href="' + href + '"]');
+
+  // mark it active
+  menuAnchor.parent().addClass('active');
+
+  // if it's got a parent navbar menu mark it active as well
+  menuAnchor.closest('li.dropdown').addClass('active');
+});
+</script>
+
+
+<div class="container-fluid main-container">
+
+<!-- tabsets -->
+<script>
+$(document).ready(function () {
+  window.buildTabsets("TOC");
+});
+</script>
+
+<!-- code folding -->
+
+
+
+
+<script>
+$(document).ready(function ()  {
+
+    // move toc-ignore selectors from section div to header
+    $('div.section.toc-ignore')
+        .removeClass('toc-ignore')
+        .children('h1,h2,h3,h4,h5').addClass('toc-ignore');
+
+    // establish options
+    var options = {
+      selectors: "h1,h2,h3",
+      theme: "bootstrap3",
+      context: '.toc-content',
+      hashGenerator: function (text) {
+        return text.replace(/[.\\/?&!#<>]/g, '').replace(/\s/g, '_').toLowerCase();
+      },
+      ignoreSelector: ".toc-ignore",
+      scrollTo: 0
+    };
+    options.showAndHide = false;
+    options.smoothScroll = true;
+
+    // tocify
+    var toc = $("#TOC").tocify(options).data("toc-tocify");
+});
+</script>
+
+<style type="text/css">
+
+#TOC {
+  margin: 25px 0px 20px 0px;
+}
+@media (max-width: 768px) {
+#TOC {
+  position: relative;
+  width: 100%;
+}
+}
+
+
+.toc-content {
+  padding-left: 30px;
+  padding-right: 40px;
+}
+
+div.main-container {
+  max-width: 1200px;
+}
+
+div.tocify {
+  width: 20%;
+  max-width: 260px;
+  max-height: 85%;
+}
+
+@media (min-width: 768px) and (max-width: 991px) {
+  div.tocify {
+    width: 25%;
+  }
+}
+
+@media (max-width: 767px) {
+  div.tocify {
+    width: 100%;
+    max-width: none;
+  }
+}
+
+.tocify ul, .tocify li {
+  line-height: 20px;
+}
+
+.tocify-subheader .tocify-item {
+  font-size: 0.90em;
+  padding-left: 25px;
+  text-indent: 0;
+}
+
+.tocify .list-group-item {
+  border-radius: 0px;
+}
+
+.tocify-subheader {
+  display: inline;
+}
+.tocify-subheader .tocify-item {
+  font-size: 0.95em;
+}
+
+</style>
+
+<!-- setup 3col/9col grid for toc_float and main content  -->
+<div class="row-fluid">
+<div class="col-xs-12 col-sm-4 col-md-3">
+<div id="TOC" class="tocify">
+</div>
+</div>
+
+<div class="toc-content col-xs-12 col-sm-8 col-md-9">
+
+
+
+
+<div class="navbar navbar-default  navbar-fixed-top" role="navigation">
+  <div class="container">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar">
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="index.html"></a>
+    </div>
+    <div id="navbar" class="navbar-collapse collapse">
+      <ul class="nav navbar-nav">
+        <li>
+  <a href="index.html">Home</a>
+</li>
+          <li><a href="D1-day1.html"><b>Day 1</b></a></li>
+<li><a href="00-before-we-start.html">Saving Files with Git</a></li>
+<li><a href="01-research-question.html">Research Question</a></li>
+<li><a href="02-starting-with-data.html">Data Fundamentals</a></li>
+<li><a href="03-working-with-data.html">Working With Data</a></li>
+<li><a href="04-data-services.html">Data Services</a></li>
+          <li><a href="D2-day2.html"><b>Day 2</b></a></li>
+      </ul>
+      <ul class="nav navbar-nav navbar-right">
+        <li>
+  <a href="https://github.com/pow123/UWI-Mona">
+    <span class="fa fa-github fa-lg"></span>
+     
+  </a>
+</li>
+      </ul>
+    </div><!--/.nav-collapse -->
+  </div><!--/.container -->
+</div><!--/.navbar -->
+
+<div class="fluid-row" id="header">
+
+
+
+<h1 class="title toc-ignore">Working with Data: OpenRefine</h1>
+<h4 class="author"><em>The Data 'Shop</em></h4>
+
+</div>
+
+<hr />
+<blockquote>
+<h2 id="learning-objectives">Learning Objectives</h2>
+<ul>
+<li>Create projects in OpenRefine.</li>
+<li>Delete unnecessary columns.</li>
+<li>Restructure spreadsheet into tidy data format.</li>
+</ul>
+</blockquote>
+<hr />
+<div id="about-openrefine" class="section level2">
+<h2>About OpenRefine</h2>
+<p><em>formerly Google Refine</em></p>
+    <p>OpenRefine is a powerful tool for working with messy data: cleaning it, transforming it from one format into another, and extending it with web services and external data. Working as a standalone open source desktop application, use OpenRefine for data cleanup and transformation to other formats - i.e., data wrangling. It is similar to spreadsheet applications; however, it behaves more like a database.</p>
+</div>
+<div id="creating-projects" class="section level2">
+<h2>Creating projects</h2>
+    <p>You create a "project" or a file to save the actions you took within your dataset. To create a project, open OpenRefine. The interface will appear as a tab in your browser. You can also type in <code>127.0.0.1:3333</code> in the address bar for OpenRefine.</p> For the activity, we will be using the World Health Organization (WHO) <a href="http://apps.who.int/gho/data/view.main.CTRY12461?lang=en">dataset of mean body mass index (BMI) trends among adults, age-standardized (kg/m²)</a>.
+    <p>&nbsp;</p>
+    <p>Start by going to <b>Create Project</b> and upload the <code>countries-BMI.csv</code> file in the <code>data</code> folder. You will be taken to a preview of your file.</p>
+    <p><img src="img/openrefine-previewproject.PNG"></p>
+    <p>Uncheck the box that says it will "parse next [1] line(s) as column headers. Click <b>Create Project</b> in the top right corner to begin.</p>
+    </div>
+    
+<div id="deleting-rows" class="section level2">
+<h2>Deleting Rows</h2>
+    <p>In this dataset, we need to delete the rows saying <b>Mean BMI (kg/m^2) (age-standardized estimate)</b> and <b>18+ years</b> because they don't actually represent an instance of data within the dataset. To remove a row, click the star next to the beginning of the rows you want to delete. Then choose the drop-down arrow by <b>All</b> in the top left. Then select <code>Facet</code> -> <code>Facet by star</code>.</p>
+    <p><img src="img/openrefine-facetbystar.PNG"></p>
+    <p>On the left will appear the facets showing which rows were and weren't starred. Select <b>true</b> to limit your data to the rows that were starred.</p>
+    <p><img src="img/openrefine-starfacet.png"></p>
+    <p>Now, to delete those rows, select <code>All</code>-><code>Edit rows</code>-><code>Remove all matching rows</code>.</p>
+    <p><img src="img/openrefine-removerows.png"></p>
+    <p>Hit the <b>X</b> in the facet box on the left to clear the filter and display the remaining rows.</p>
+    </div>
+    
+<div id="openrefine-JSON" class="section level2">
+<h2>JSON Scripts in OpenRefine</h2>
+    <p>OpenRefine harnesses the power of scripts by providing the option to <b>Extract Operation History</b>. By going to the <b>Undo/Redo</b> tab and clicking <b>Extract</b>, it will display the operation history as a JSON that can be applied to future projects, saving you the time of redoing all of the steps manually.</p>
+    <p><img src="img/openrefine-JSON.PNG"></p>
+    </div>
+    
+<div id="other-features" class="section level2">
+<h2>Other Features of OpenRefine</h2>
+    <p>There are many more features in OpenRefine that we won't be using but are very helpful in cleaning data.</p>
+    <ul>
+        <li><b>Facets:</b> Facets let you see unique values within a column. If there are errors to be fixed or items you'd like to replace, you can click on that unique value and update it. Those changes will then be made wherever that value is present within that column.</li>
+        <li><b>Clusters:</b> Clustering allows you to spot similarities and clean dirty data. For example, <em>key collision</em> and <em>nearest neighbor</em> clusters would correct slight differences or misspellings, bringing variations together to match one another based on your specifications. For example, a cell with the typo <em>new yorkk</em> would be corrected to match with the other cells that say <em>New York</em>.</li>
+        <li><b>Quick Commands:</b> There are a number of quick commands allowing you to do things like remove various whitespaces, split/merge columns, and change capitalization in one click.</li>
+        <li><b>Action History:</b> In addition to the JSON file, your OpenRefine project includes the entire history of the actions you have taken, and you are able to Undo or Redo any of those actions at any time.</li>
+    </ul>
+    <p>When working with researchers, I often load their data to OpenRefine to clean it and to create a data dictionary using the list of text facets for each column. OpenRefine is a powerful tool with great capabilities. Actually, our entire upcoming activity in R can also be accomplished in OpenRefine.</p>
+    </div>
+    
+<div id="exporting-the-dataset" class="section level2">
+<h2>Exporting the Dataset</h2>
+    <p>Our last activity will be to export the dataset.</p>
+    <p> Go to <code>Export</code> and select <b>Comma-separated value</b>.</p>
+    <p><img src="img/openrefine-export.png"></p>
+    <p>This will download a CSV file <code>countries-BMI-csv</code> to your computer. Open the downloaded file and delete the first row. Then go to <code>File</code>-><code>Save As</code>. Save the file as <code>countries-BMI-1.0.csv</code> back in your data folder.</p>
+    </div>
+
+    <p><a href="http://thedatashop.weebly.com/">The Data 'Shop</a>,
+  2017. <a href="LICENSE.html">License</a>. <a href="CONTRIBUTING.html">Contributing</a>. <br/>
+  Questions?  Feedback?
+  Please <a href="https://github.com/pow123/UWI-Mona/issues/new">file
+  an issue on GitHub</a>. <br/> On
+  Twitter: <a href="https://twitter.com/123POW">@123POW</a></p>
+    </div>
+    </div>
+    </div>
+    </div>
+
+<script>
+
+// add bootstrap table styles to pandoc tables
+function bootstrapStylePandocTables() {
+  $('tr.header').parent('thead').parent('table').addClass('table table-condensed');
+}
+$(document).ready(function () {
+  bootstrapStylePandocTables();
+});
+
+
+</script>
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>

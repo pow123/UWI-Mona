@@ -1,0 +1,757 @@
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+<head>
+
+<meta charset="utf-8" />
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="generator" content="pandoc" />
+
+
+<meta name="author" content="Peace Ossom-Williamson" />
+
+
+<title>Data Cleaning & Analytics</title>
+
+<script src="site_libs/jquery-1.11.3/jquery.min.js"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link href="site_libs/bootstrap-3.3.5/css/bootstrap.min.css" rel="stylesheet" />
+<script src="site_libs/bootstrap-3.3.5/js/bootstrap.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/respond.min.js"></script>
+<script src="site_libs/jqueryui-1.11.4/jquery-ui.min.js"></script>
+<link href="site_libs/tocify-1.9.1/jquery.tocify.css" rel="stylesheet" />
+<script src="site_libs/tocify-1.9.1/jquery.tocify.js"></script>
+<script src="site_libs/navigation-1.1/tabsets.js"></script>
+<link href="site_libs/font-awesome-4.5.0/css/font-awesome.min.css" rel="stylesheet" />
+
+
+
+
+<style type="text/css">
+h1 {
+  font-size: 34px;
+}
+h1.title {
+  font-size: 38px;
+}
+h2 {
+  font-size: 30px;
+}
+h3 {
+  font-size: 24px;
+}
+h4 {
+  font-size: 18px;
+}
+h5 {
+  font-size: 16px;
+}
+h6 {
+  font-size: 12px;
+}
+.table th:not([align]) {
+  text-align: left;
+}
+</style>
+
+<link rel="stylesheet" href="style.css" type="text/css" />
+
+</head>
+
+<body>
+
+<style type = "text/css">
+.main-container {
+  max-width: 940px;
+  margin-left: auto;
+  margin-right: auto;
+}
+code {
+  color: inherit;
+  background-color: rgba(0, 0, 0, 0.04);
+}
+img {
+  max-width:100%;
+  height: auto;
+}
+.tabbed-pane {
+  padding-top: 12px;
+}
+button.code-folding-btn:focus {
+  outline: none;
+}
+</style>
+
+
+<style type="text/css">
+/* padding for bootstrap navbar */
+body {
+  padding-top: 51px;
+  padding-bottom: 40px;
+}
+/* offset scroll position for anchor links (for fixed navbar)  */
+.section h1 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+
+.section h2 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.section h3 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.section h4 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.section h5 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.section h6 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+</style>
+
+<script>
+// manage active state of menu based on current page
+$(document).ready(function () {
+  // active menu anchor
+  href = window.location.pathname
+  href = href.substr(href.lastIndexOf('/') + 1)
+  if (href === "")
+    href = "index.html";
+  var menuAnchor = $('a[href="' + href + '"]');
+
+  // mark it active
+  menuAnchor.parent().addClass('active');
+
+  // if it's got a parent navbar menu mark it active as well
+  menuAnchor.closest('li.dropdown').addClass('active');
+});
+</script>
+
+
+<div class="container-fluid main-container">
+
+<!-- tabsets -->
+<script>
+$(document).ready(function () {
+  window.buildTabsets("TOC");
+});
+</script>
+
+<!-- code folding -->
+
+
+
+
+<script>
+$(document).ready(function ()  {
+
+    // move toc-ignore selectors from section div to header
+    $('div.section.toc-ignore')
+        .removeClass('toc-ignore')
+        .children('h1,h2,h3,h4,h5').addClass('toc-ignore');
+
+    // establish options
+    var options = {
+      selectors: "h1,h2,h3",
+      theme: "bootstrap3",
+      context: '.toc-content',
+      hashGenerator: function (text) {
+        return text.replace(/[.\\/?&!#<>]/g, '').replace(/\s/g, '_').toLowerCase();
+      },
+      ignoreSelector: ".toc-ignore",
+      scrollTo: 0
+    };
+    options.showAndHide = false;
+    options.smoothScroll = true;
+
+    // tocify
+    var toc = $("#TOC").tocify(options).data("toc-tocify");
+});
+</script>
+
+<style type="text/css">
+
+#TOC {
+  margin: 25px 0px 20px 0px;
+}
+@media (max-width: 768px) {
+#TOC {
+  position: relative;
+  width: 100%;
+}
+}
+
+
+.toc-content {
+  padding-left: 30px;
+  padding-right: 40px;
+}
+
+div.main-container {
+  max-width: 1200px;
+}
+
+div.tocify {
+  width: 20%;
+  max-width: 260px;
+  max-height: 85%;
+}
+
+@media (min-width: 768px) and (max-width: 991px) {
+  div.tocify {
+    width: 25%;
+  }
+}
+
+@media (max-width: 767px) {
+  div.tocify {
+    width: 100%;
+    max-width: none;
+  }
+}
+
+.tocify ul, .tocify li {
+  line-height: 20px;
+}
+
+.tocify-subheader .tocify-item {
+  font-size: 0.90em;
+  padding-left: 25px;
+  text-indent: 0;
+}
+
+.tocify .list-group-item {
+  border-radius: 0px;
+}
+
+.tocify-subheader {
+  display: inline;
+}
+.tocify-subheader .tocify-item {
+  font-size: 0.95em;
+}
+
+</style>
+
+<!-- setup 3col/9col grid for toc_float and main content  -->
+<div class="row-fluid">
+<div class="col-xs-12 col-sm-4 col-md-3">
+<div id="TOC" class="tocify">
+</div>
+</div>
+
+<div class="toc-content col-xs-12 col-sm-8 col-md-9">
+
+
+
+
+<div class="navbar navbar-default  navbar-fixed-top" role="navigation">
+  <div class="container">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar">
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="index.html"></a>
+    </div>
+    <div id="navbar" class="navbar-collapse collapse">
+      <ul class="nav navbar-nav">
+        <li>
+  <a href="index.html">Home</a>
+</li>
+          <li><a href="D1-day1.html"><b>Day 1</b></a></li>
+          <li><a href="D2-day2.html"><b>Day 2</b></a></li>
+          <li><a href="11-data-science.html">About Data Science</a></li>
+          <li><a href="12-data-cleaning-analytics.html">Data Wrangling in R</a></li>
+          <li><a href="13-data-viz.html">Data Visualization in Tableau</a></li>
+
+      </ul>
+      <ul class="nav navbar-nav navbar-right">
+        <li>
+  <a href="https://github.com/pow123/UWI-Mona">
+    <span class="fa fa-github fa-lg"></span>
+     
+  </a>
+</li>
+      </ul>
+    </div><!--/.nav-collapse -->
+  </div><!--/.container -->
+</div><!--/.navbar -->
+
+<div class="fluid-row" id="header">
+
+
+
+<h1 class="title toc-ignore">Data Cleaning & Analytics</h1>
+<h4 class="author"><em>The Data 'Shop</em></h4>
+
+</div>
+
+
+<hr />
+<blockquote>
+<h2 id="objectives">Learning Objectives</h2>
+Upon completion, participants will be able to<ol>
+    <li>Describe R and RStudio.</li>
+    <li>Load data frames in R.</li>
+    <li>Utilize the building blocks of the R language.</li>
+    <li>Extract parts of a dataset.</li>
+    <li>Reshape wide data into tidy data in R.</li>
+    <li>Separate columns using delimiters in R.</li>
+    <li>Write, save, and run an R script.</li>
+    </ol>
+</blockquote>
+<hr />
+<div id="About R" class="section level1">
+<h1>About R</h1>
+    <p>R is a free software programming language for statistical computing and graphics. When you have RStudio installed, it integrates with R as an IDE (Integrated Developmet Environment) to provide further functionality. You can do without RStudio, but it makes working in R more effective.</p>
+
+<h4>Why R?</h4>
+
+<ul>
+<li>Statistics, graphics, general purpose programming</li>
+
+<li>Thousands of packages available - these are collections of functions that implement all kinds of analyses of data sets from various disciplines</li>
+
+<li>Open source software - use for free, modify as you wish</li>
+
+<li>Active community of developers - new packages are being written as we speak</li>
+</ul>
+</div>
+<div id="about-rstudio" class="section level1">
+    <h1>About RStudio</h1>
+<p>RStudio is an interface for R. We will be working with R using RStudio. This is a piece of software (also known as integrated development environment, or IDE) that makes working in R much easier. When you open RStudio, you should see 4 windows:</p>
+
+<div id="rstudio-layout" class="section level2">
+    <h2>The 4 windows of RStudio</h2>
+
+<ol>
+<li>Top left: text editor. Write your commands/code here, and you can save your work as a script.</li>
+
+<li>Bottom left: R console, run (execute) your commands here.</li>
+
+<li>Top right: consists of things R keeps track of in the History and Environment tabs.
+
+<ul>
+<li>The History tab records all the commands you type in the R console.</li>
+
+    <li>The Environment tab keeps track of all the objects you create in the current session.</li></ul>
+
+Both records can be saved for later as .Rhistory and .RData files.</li>
+
+<li>Bottom right: Consists of several helpful tabs. For now, notice that the <code>Files</code> tab allows you to navigate between folders.</li>
+    </ol>
+    <p>For this workshop, we need to navigate to the <code>data</code> folder within the <code>UWI_Mona</code> folder that we created on the Desktop. </p>
+    
+    <p>Click the three dots icon at the top right corner of the <code>Files</code> tab and navigate to <b>Desktop/UWI_Mona/data</b>. When there, click <b>More</b> and select <b>Set as working directory</b>. </p>
+    <p>Notice the change in your console window  - your work with R is now done from <code>data</code> folder.</p>
+</div>
+<div id="executing-commands" class="section level2">
+<h2>Executing Commands</h2>
+    <p>When you type commands in the console window (bottom left) and press <b>Enter</b> on your keyboard, they are executed immediately and the output is displayed. 
+        <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="dv">3</span> <span class="op">+</span><span class="st"> </span><span class="dv">5</span>
+<span class="dv">12</span><span class="op">/</span><span class="dv">7</span></code></pre></div>
+<p>We can also comment on what it is that we’re doing</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># I&#39;m adding 3 and 5. R is fun!</span>
+<span class="dv">3</span><span class="op">+</span><span class="dv">5</span></code></pre></div>
+<p>What happens if we type that same command without the # sign in the front?</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">I<span class="st">&#39;m adding 3 and 5. R is fun!</span>
+<span class="st">3+5</span></code></pre></div>
+    <p>Now R is trying to run that sentence as a command, and it doesn’t work. Now we’re stuck over in the console. The <code>+</code> sign means that it’s still waiting for input, so we can’t type in a new command. To get out of this press the <code>Esc</code> key. This will work whenever you’re stuck with that <code>+</code> sign.Symbol <code>&gt;</code> means that the R is ready for the next command. If you enter incomplete commands, you will see <code>+</code> which means that the system is waiting for you to complete the command. </p>
+
+    <p>Now, let's try something other than mathematical commands.</p>
+
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="st">print("How are you?")</span> <span class="op">+</span><span class="st"> </span><span class="dv">5</span>
+<span class="dv">12</span><span class="op">/</span><span class="dv">7</span></code></pre></div>
+<pre><code> print("Good morning")
+print(64)
+</code></pre>
+    <p><em>NOTE: Use quotes around characters, but not around numbers, unless you want them to be seen as characters.</em></p>
+    
+<p>Notice the commands that come with parentheses beside it. These are called functions. Functions typically need an argument inside the parentheses.</p>
+</div></div>
+    <div id="Using R" class="section level1">
+        <h1>Using R</h1>
+<div id="variables" class="section level3">
+    <h2>Assigning to Variables</h2>
+
+<p>One of the main concepts of any programming language is the notion of a variable. Variables are created to store values for future use.
+For example, if you wanna get the value of 3+5, you have to run the command every time. But you can store the value under a variable for future use.
+A variable with a value becomes an object.</p>
+
+<p>To create a variable in R, use <code>&lt;-</code> (Alt + dash) assignment operator:</p>
+
+<pre><code>
+# variable name that stores the character value "Jane"
+name &lt;- "Jane"
+print(name)
+
+# variable price that stores the value 3.99
+price &lt;- 3.99
+print(price)
+
+# working with environment
+# remember what env does? it stores the objects you created. Let's see what the environment tab show us. So, how do you see the list on screen?
+
+# list all objects in your environment
+ls()
+
+# how do you remove an object?
+#rm(objectName)
+rm(price)
+
+#remove all objects, clear environment
+rm(list=ls()) 
+</code></pre>
+    </div>
+    <div class="scripting" class="section level2">
+<h2>Scripting</h2>
+        <p>It is often the case that we would like to reuse our commands. If so, you can type commands in the text editor window. </p>
+        <p>Let's open a new R Script file by clicking the + sign on the top right corner of scripting panel and write our command there, 
+            for example <code>print("Good morning!")</code>.</p> 
+        <p>To check if this command works, you can send it for execution to console with <b>CTRL+Enter</b> click. (For a Mac, you press <b>Command+Enter</b>.) Otherwise, if you want to keep going without executing the command, press Enter to move to the next line in your script.</p>
+<p>We have a very simple example here, but you can imagine writing hundreds of commands in the order you want them to be executed to 
+    accomplish a certain task. This is what an R program or R script is. </p>
+        <p><em>It is a good practice to comment your code.</em> The comments (statements that are helpful to the user, but are not seen by R as commands to be executed) in R start with <code>#</code>. </p>
+<p>Let's add a comment to our simple script.</p>
+
+<pre><code>#my first R command 
+print("Good morning")
+</code></pre>
+
+<p>We can save the file with our commands and reuse it later. For now, let's save our example as R_commands.R file in the <code>data</code> folder.</p>
+
+</div><h3 id="functions">Functions</h3>
+
+<p>In general, a function takes an input and transforms it according to the function's definition(rules). 
+You can recognize functions in R by the presence of parantheses. Objects in parantheses are called function's <strong>arguments</strong>.</p>
+
+<pre><code>#applying square root function
+mass&lt;-64 #is a variable
+sqrt(mass) #function with argument provided
+res&lt;-sqrt(mass) #variable with a function as its value</code></pre>
+    <p>In the example, the square root function takes the <b>mass</b> object as input and finds the square root of its value. The result is then assigned to <code>res</code> variable. In our second example, <code>getwd()</code> is a function that outputs your current location within the file system. Although there is no input (many functions do not require arguments), parantheses are still required for a proper syntax in R.</p>
+
+
+<p>There are thousands of built-in functions in R. 
+There are also help functions that you can use to find out what other function do and how to use them. 
+The help appears in the bottom-right window of the RStudio.</p>
+
+<pre><code># helpfunctions
+?plot
+help(mean)
+</code></pre>
+    </div>
+<div id="reshaping-data" class="section level1">
+    <h1>Reshaping Our Data in R</h1>
+
+<p>Let's work in scripting mode from now on so that you will have the record of all commands we used in this lesson.</p>
+
+
+<h3 id="packages">Packages</h3>
+<p>The functionality of R is expanded by R packages that include functions not present in the default installation of R. 
+When you need to use another package, do these 2 things:</p>
+
+<pre><code># download the package to your machine - once per computer
+install.packages("packagename")
+
+#load package into your active session of R - once per session
+libary(packagename)
+</code></pre>
+
+<p>We will use the <b>reshape2</b> and <b>tidyr</b> packages for this exercise because they were created for tidying data, which is what we need.</p>
+    
+<blockquote><strong>Question:</strong> How do we install and load the functions available from these packages?</blockquote>
+
+
+    <h3>Data types and Data structures</h3>
+    <h4>Data Types</h4>
+<p>Single-element data structures are the smallest units in R. For example, if we assigned the value of 45 to a variable <b>age</b> by inputing <code> age&lt;-45</code>, we just created the smallest object in R.</p>
+
+
+Variables can also hold values of various types. The most common data types are
+<ul>
+<li>numeric(double+integer)</li>
+<li>character</li>
+<li>logical</li>
+<li>complex</li>
+    </ul>
+Some useful functions to know about an object are the following:
+<pre><code>length(age)
+str(age)
+is.integer(age)
+typeof(age)
+typeof(is.integer(age))</code></pre>
+    
+    
+    </ul>
+    <blockquote> <strong>Question:</strong>
+What data type is stored in `score` variable after inputting <code> score&lt;-c(1,4,3)</code>? </blockquote>
+
+
+    <p>The last expression is an example of nested function. Nested functions are very common in R, but are very difficult to understand at first. You can always split nested function into a series of single function calls. Remember that the variable inside the most inner paranthesis is an argument(input)for the function that will be evaluated first.</p>
+
+
+    Sometimes you will need to convert between data types. There are functions that do that: <code>as.integer()</code>, <code>as.character()</code>, and so on. <em>NOTE: The conversion between data types is not always possible. Think about converting between character and integer.</em>
+<p>&nbsp;</p>
+<h4>Data Structures</h4>
+The small objects can be combined to build larger objects. Let's load the <code>countries-BMI-1.0.csv</code> dataset to explore it. 
+    
+    <pre><code>#check where you are
+getwd()
+    
+#move to the correct folder, if needed
+setwd(~/Desktop/UWI-Mona/data)
+    
+#load data
+cdata &lt;- read.csv("countries-BMI-1.0.csv", skip = 2, header = F)
+    
+#check the first few rows
+head(cdata)
+    </code></pre>
+    
+Our smallest objects can be used to represent a single element in the dataset, like individual year, or individual country, but what happens when you combine them? Here are common data structures:
+    <ul>
+        <li>Vectors: collection of elements of the same data type</li>
+        <li>Factors: special vectors used to represent categorical data</li>
+        <li>Lists: generic vectors - collection of elements with different data types</li>
+        <li>Matrices: 2-dimentional vectors - i.e., same data type</li>
+        <li>Data frames: 2-dimensional lists - i.e., collection of elements with different data types</li>
+    </ul>
+
+    <blockquote>Type <code>str(cdata)</code> to see info about your variable.</blockquote>
+
+   
+     <h4>Data frames</h4>
+
+     <blockquote><strong>Question: </strong>For our <code>cdata</code> variable, could you make an informative guess about how what data structure this is in R?</blockquote>
+
+     <p><em>Yes! It is a list of factors of equal length, or a data frame. </em></p>
+       <p> Notice that a data is a list of vectors. So, using <code>typeof(cdata)</code> will return <code>list</code>. Data frames are extremely useful data structures as they represent table-like datasets.</p>    
+     <p>&nbsp;</p>
+     <h4>Tip:</h4>
+     <pre><code>dim(m)  # tells you number of rows and columns in your matrix</code></pre>
+     
+
+    <h3>Subsetting</h3>
+
+Now let's talk about how to take your dataset apart, or <em>subsetting</em>. Subsetting is a very common practice in programming. In general, you can access every element of your data set. You must be able to do that to manipulate and analyze your data. 
+    
+    
+    There are many ways to subset the data, but we will use two below.
+<p>&nbsp;</p>
+    <strong>First Way to Subset</strong>
+<pre><code>#indicate which row and column
+cdata[x, y]  #Structure: Row number comes before the comma; column number comes after the comma.
+
+#some examples
+cdata[5, 3] #Retrieves the data from the cell in the 5th row in the 3rd column of the data frame
+cdata[c(5,6), 3] #Retrieves the data from the 2nd and 5th and 6th rows in the 3rd column. You can also use a colon to represent a range - i.e., cdata[c(5:6), 3]
+cdata[, 1] #Retrieves the entire first column of data
+
+#use head to show the first 6 rows in the output
+head(cdata[, 1])
+    </code></pre>
+    
+    <p>Let's add a header to the data in order to see the other methods of subsetting. We need to do this by combining the first two rows which contain information about the year and sex in order to make unique headers. We will select the rows into a variable we will call <code>headers</code>.</p>
+    
+    Use <code>nrows</code> to create "headers" using the first two rows of the dataset:
+    <pre><code>headers &lt;- read.csv("countries-BMI-1.0.csv", nrows = 2, header = F)</code></pre>
+
+    <p>Next, use <code>sapply</code> and <code>paste</code> to combine the data in each of the two columns into one header, separated by an underscore. Then use the <code>names()</code> function to add that created header to your dataset.
+    <pre><code>headers_names &lt;- sapply(headers, paste, collapse = "_")
+    names(cdata) &lt;- headers_names
+    
+    #see the result
+    head(cdata)</code></pre>
+    
+    
+
+<h3>Reshaping/Transposing Data</h3>
+    <p>Now, we are going to change the dataset to a more tidy format by transposing the data, also known as reshaping or melting. We want to go from having BMIs going across columns to being all in one column. To do this, our Year/Sex headers will need to become Year and Sex columns.
+    </p>
+    
+<pre><code>#tidy/melt the data after the Country column. Save that action in a variable called longdata.
+longdata &lt;- melt(cdata, id.vars = c("_Country"))
+    
+#separate the year and sex into their own columns, using the underscore as the separator, and save that to a variable called countriesBMI2.
+countriesBMI2 &lt;- separate(data = longdata, col = variable,  into = c("Year", "Sex"), sep = "_")</code>
+
+#check your work
+head(countriesBMI2)</pre>
+    
+    
+    <strong>Second Way to Subset</strong>
+        <p>Let's use the second way to subset to clean the data.</p>
+        <p>Instead of being blank, areas that have no data say "No Data." This is not useful in most programs. So, we will make these nulls. In R, nulls are represented as NA.</p>
+    
+<pre><code>#subset by column using a dollar sign and column name after the variable name
+countriesBMI2$value[countriesBMI2$value == "No data"] &lt;- NA</code></pre>
+        
+<p>Right now, the BMI averages are provided along with the standard deviations' upper and lower limits. Because of this, those cells are string values instead of numerical. So, let's also separate the BMIs from the standard error ranges so we can work with them as numerical values, which can be added, subtracted, averaged, etc.</p>
+        
+<pre><code>#we will update the countriesBMI2 variable; so, be sure to run the previous command before running this one.
+countriesBMI2 &lt;- separate(data = countriesBMI2, col=value, into = c("BMI", "Error"), sep = " ")
+
+#check your work
+head(countriesBMI2)</code></pre>
+        </div>
+<div id="saving" class="section level1">
+<h1>Saving Files</h1>
+    <h3>Saving Your Dataset</h3>
+    <p>Use <code>write.csv</code> to save your updated dataset to a new CSV file. Be sure to remember your data management rules for naming.</p>
+<pre><code>write.csv(countriesBMI2, file = "countries-BMI-2.0.csv")</code></pre>
+    <p>&nbsp;</p>
+<h3>Saving Your Script</h3>
+    Remember you are writing a simple R script? An R script (or any other script) is a series of commands that are executed in the order they are written. The commands that we have executed one by one in R studio can be written to a text file and then executed all at once by running the file (which is now an R script). R scripts usually have .R extensions. Let's save ours as <code>reshape_countries-BMI.R</code>.
+    </div>
+    <div id="running-scripts" class = "section level 1">
+        <h1>Running Scripts</h1>
+<p>Let's run a script to melt/reshape the <code>jamaica-worldbank-data.csv</code>.
+<pre><code>#view the first 7 columns and 6 rows of the dataset
+head(read.csv("jamaica-worldbank-data.csv", header = T)[, 1:5])
+
+#to run the script from RStudio (or R), use the source() function
+source("reshape_jamaica_data.R")
+</code></pre>
+<p>Now you have run the script which created the file <code>jamaica-worldbank-data-1.0.csv</code> in your <code>data</code> folder. Visit the folder to see the new dataset.</p>
+        </div>
+<p><strong><em>Summary</em></strong></p>
+
+<p>This lesson introduced you to main ideas of programming: variables, functions, data structures and scripts. Now you can write your own simple programs in R and begin understanding R code written by others. Now that we have worked with the data in R, we will visualize our data in Tableau.</p>
+
+
+    <div id="seeking-help" class="section level1">
+<h1>SEEKING HELP</h1>
+
+<h4>I know the name of the function I want to use, but I’m not sure how to use it</h4>
+<p>If you need help with a specific function, let’s say <code>barplot()</code>, you can type:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">?barplot</code></pre></div>
+<p>If you just need to remind yourself of the names of the arguments, you can use:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">args</span>(lm)</code></pre></div>
+<p>If the function is part of a package that is installed on your computer but don’t remember which one, you can type:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">??geom_point</code></pre></div>
+<p>&nbsp;</p>
+
+<h4>I want to use a function that does X, there must be a function for it but I don’t know which one…</h4>
+<p>If you are looking for a function to do a particular task, you can use <code>help.search()</code> (but only looks through the installed packages):</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">help.search</span>(<span class="st">&quot;kruskal&quot;</span>)</code></pre></div>
+<p>If you can’t find what you are looking for, you can use the <a href="http://www.rdocumentation.org">rdocumention.org</a> website that search through the help files across all packages available.</p>
+<p>&nbsp;</p>
+<h4>I am stuck… I get an error message that I don’t understand</h4>
+<p>Start by googling the error message. However, this doesn’t always work very well because often, package developers rely on the error catching provided by R. You end up with general error messages that might not be very helpful to diagnose a problem (e.g. “subscript out of bounds”).</p>
+<p>However, you should check <a href="https://stackoverflow.com">stackoverflow.com</a>. Search using the <code>[r]</code> tag. Most questions have already been answered, but the challenge is to use the right words in the search to find the answers: <a href="http://stackoverflow.com/questions/tagged/r" class="uri">http://stackoverflow.com/questions/tagged/r</a></p>
+<p>The <a href="http://cran.r-project.org/doc/manuals/R-intro.pdf">Introduction to R</a> can also be dense for people with little programming experience but it is a good place to understand the underpinnings of the R language.</p>
+<p>The <a href="http://cran.r-project.org/doc/FAQ/R-FAQ.html">R FAQ</a> is dense and technical but it is full of useful information.</p>
+
+<div id="how-to-ask-for-help" class="section level2">
+<h3>How to Ask for Help</h3>
+<p>The key to get help from someone is for them to grasp your problem rapidly. You should make it as easy as possible to pinpoint where the issue might be.</p>
+<p>Try to use the correct words to describe your problem. For instance, a package is not the same thing as a library. Most people will understand what you meant, but others have really strong feelings about the difference in meaning. The key point is that it can make things confusing for people trying to help you. Be as precise as possible when describing your problem</p>
+<p>If possible, try to reduce what doesn’t work to a simple reproducible example. If you can reproduce the problem using a very small <code>data.frame</code> instead of your 50,000 rows and 10,000 columns one, provide the small one with the description of your problem. When appropriate, try to generalize what you are doing so even people who are not in your field can understand the question.</p>
+<p>To share an object with someone else, if it’s relatively small, you can use the function <code>dput()</code>. It will output R code that can be used to recreate the exact same object as the one in memory:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">dput</span>(<span class="kw">head</span>(iris)) <span class="co"># iris is an example data.frame that comes with R</span></code></pre></div>
+<pre><code>## structure(list(Sepal.Length = c(5.1, 4.9, 4.7, 4.6, 5, 5.4), 
+##     Sepal.Width = c(3.5, 3, 3.2, 3.1, 3.6, 3.9), Petal.Length = c(1.4, 
+##     1.4, 1.3, 1.5, 1.4, 1.7), Petal.Width = c(0.2, 0.2, 0.2, 
+##     0.2, 0.2, 0.4), Species = structure(c(1L, 1L, 1L, 1L, 1L, 
+##     1L), .Label = c(&quot;setosa&quot;, &quot;versicolor&quot;, &quot;virginica&quot;), class = &quot;factor&quot;)), .Names = c(&quot;Sepal.Length&quot;, 
+## &quot;Sepal.Width&quot;, &quot;Petal.Length&quot;, &quot;Petal.Width&quot;, &quot;Species&quot;), row.names = c(NA, 
+## 6L), class = &quot;data.frame&quot;)</code></pre>
+<p>If the object is larger, provide either the raw file (i.e., your CSV file) with your script up to the point of the error (and after removing everything that is not relevant to your issue). Alternatively, in particular if your questions is not related to a <code>data.frame</code>, you can save any R object to a file. Note: for this example, the folder “/tmp” needs to already exist.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">saveRDS</span>(iris, <span class="dt">file=</span><span class="st">&quot;/tmp/iris.rds&quot;</span>)</code></pre></div>
+<p>The content of this file is however not human readable and cannot be posted directly on stackoverflow. It can however be sent to someone by email who can read it with this command:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">some_data &lt;-<span class="st"> </span><span class="kw">readRDS</span>(<span class="dt">file=</span><span class="st">&quot;~/Downloads/iris.rds&quot;</span>)</code></pre></div>
+<p>Last, but certainly not least, <strong>always include the output of <code>sessionInfo()</code></strong> as it provides critical information about your platform, the versions of R and the packages that you are using, and other information that can be very helpful to understand your problem.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">sessionInfo</span>()</code></pre></div>
+<pre><code>## R version 3.4.2 (2017-09-28)
+## Platform: x86_64-pc-linux-gnu (64-bit)
+## Running under: Ubuntu 14.04.5 LTS
+## 
+## Matrix products: default
+## BLAS: /usr/lib/libblas/libblas.so.3.0
+## LAPACK: /usr/lib/lapack/liblapack.so.3.0
+## 
+## locale:
+##  [1] LC_CTYPE=en_GB.UTF-8       LC_NUMERIC=C              
+##  [3] LC_TIME=en_GB.UTF-8        LC_COLLATE=en_GB.UTF-8    
+##  [5] LC_MONETARY=en_GB.UTF-8    LC_MESSAGES=en_GB.UTF-8   
+##  [7] LC_PAPER=en_GB.UTF-8       LC_NAME=C                 
+##  [9] LC_ADDRESS=C               LC_TELEPHONE=C            
+## [11] LC_MEASUREMENT=en_GB.UTF-8 LC_IDENTIFICATION=C       
+## 
+## attached base packages:
+## [1] stats     graphics  grDevices utils     datasets  methods   base     
+## 
+## loaded via a namespace (and not attached):
+##  [1] compiler_3.4.2  backports_1.1.0 magrittr_1.5    rprojroot_1.2  
+##  [5] tools_3.4.2     htmltools_0.3.6 yaml_2.1.14     Rcpp_0.12.12   
+##  [9] stringi_1.1.5   rmarkdown_1.6   knitr_1.17      stringr_1.2.0  
+## [13] digest_0.6.12   evaluate_0.10.1</code></pre>
+</div>
+<div id="where-to-ask-for-help" class="section level3">
+<h3>Where to Ask for Help</h3>
+<ul>
+<li>Your friendly colleagues: if you know someone with more experience than you, they might be able and willing to help you.</li>
+<li>Stackoverflow: if your question hasn’t been answered before and is well crafted, chances are you will get an answer in less than 5 min.</li>
+<li>The <a href="https://stat.ethz.ch/mailman/listinfo/r-help">R-help</a>: it is read by a lot of people (including most of the R core team), a lot of people post to it, but the tone can be pretty dry, and it is not always very welcoming to new users. If your question is valid, you are likely to get an answer very fast but don’t expect that it will come with smiley faces. Also, here more than everywhere else, be sure to use correct vocabulary (otherwise you might get an answer pointing to the misuse of your words rather than answering your question). You will also have more success if your question is about a base function rather than a specific package.</li>
+<li>If your question is about a specific package, see if there is a mailing list for it. Usually it’s included in the DESCRIPTION file of the package that can be accessed using <code>packageDescription(&quot;name-of-package&quot;)</code>. You may also want to try to email the author of the package directly.</li>
+<li>There are also some topic-specific mailing lists (GIS, phylogenetics, etc…), the complete list is <a href="http://www.r-project.org/mail.html">here</a>.</li>
+</ul>
+
+<div id="more-resources" class="section level2">
+<h3>More Resources</h3>
+<ul>
+<li>The <a href="http://www.r-project.org/posting-guide.html">Posting Guide</a> for the R mailing lists.</li>
+<li><a href="http://blog.revolutionanalytics.com/2014/01/how-to-ask-for-r-help.html">How to ask for R help</a> useful guidelines</li>
+</ul>
+    </div></div></div>
+    
+        <hr/>
+
+<p><a href="http://thedatashop.weebly.com/">The Data 'Shop</a>,
+  2017. <a href="LICENSE.html">License</a>. <a href="CONTRIBUTING.html">Contributing</a>. <br/>
+  Questions?  Feedback?
+  Please <a href="https://github.com/pow123/UWI-Mona/issues/new">file
+  an issue on GitHub</a>. <br/> On
+  Twitter: <a href="https://twitter.com/123POW">@123POW</a></p>
+</div></div>
+
+
+
+<script>
+
+// add bootstrap table styles to pandoc tables
+function bootstrapStylePandocTables() {
+  $('tr.header').parent('thead').parent('table').addClass('table table-condensed');
+}
+$(document).ready(function () {
+  bootstrapStylePandocTables();
+});
+
+
+</script>
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>
