@@ -314,17 +314,125 @@ Upon completion, participants will be able to<ol>
 <h1>Presentation</h1>
 <p>Feel free to follow along with the presentation in these slides:</p>
     <iframe src="https://docs.google.com/presentation/d/e/2PACX-1vSQWbittodt-609Pe6TLKO-lyUPGpr8PpoFkjvs-S9rQRvFNQU-g0SjIPnAgUmEH2diompqK7TE0XBV/embed?start=false&loop=false&delayms=3000" frameborder="0" width="750" height="450" allowfullscreen="true" mozallowfullscreen="true" webkitallowfullscreen="true"></iframe>
-
+    </div>
         <p>&nbsp;</p>
             <div id="tableau" class="section level1">
 <h1>Tableau</h1>
+        <p>Before opening Tableau, download the <code>Countries</code> folder from the <a href="https://github.com/pow123/UWI-Mona">UWI-Mona repository</a> in GitHub. Then move that folder into <code>My Documents -&gt; My Tableau Repository &-&gt; Shapes</code>. After you've done that, go ahead and open Tableau Public.</p>
         <p>Next, we will build dashboards in Tableau.</p> 
-                <div id="charts" class="section level2">
-                    <h2>Creating Charts</h2>
-                Steps here.
-                </div>
+                <h2>Connecting to the Data Source</h2>
+                <p>First, we are going to create the charts that will go on the dashboard. Each chart has its own sheet.</p>
+                <p>So, connect to the <code>countries-BMI-2.0.csv</code> dataset, by clicking on <b>Text File</b> on the left menu.</p>
+                <p><img src="img/tableau-connecttofile.png"></p>
+                <br />
+                <p>Then we will make a few changes to the data, including removing the underscore from the <code>Country</code> header by double-clicking, changing the Year data type to <b>Date & Time</b> by clicking the pound sign or hash above the header.</p>
+                <p><img src="img/tableau-datatypes.png"></p>
+                <p>If you'd like, you can also hide the first column using the arrow pointing down next to the header.</p>
+                
+                <h2>Creating Charts</h2>
+                <p>To create a chart, click on <b>Sheet 1</b> in a tab at the bottom of the application. To add elements to the chart, you drag the variable (called a <em>pill</em>) from the left menu to the center space or to the <b>Rows</b> or <b>Columns</b> area near the top.</p>
+                <p>Notice the variables are divided into <b>Dimensions</b> and <b>Measures</b> on the left, based on whether they are continuous/discrete data or <em>other</em> data types.</p>
+                <h3>Chart 1: Icons</h3>
+                <p>We are going to create a chart just to use the icons later. Start with Sheet 1. First, we will limit to those countries that are in North America and the Greater Antilles by dragging the <b>Country</b> pill to the Filters area and select Canada, Cuba, Dominican Republic, Haiti, Jamaica, Mexico, and the United States of America by pressing <b>None</b> and then checking the appropriate boxes.</p>
+                <p><img src="img/tableau-countryfilter.png"></p>
+                <p><em>NOTE: Because Cayman Islands and Puerto Rico are not countries in themselves, they don't have their own numbers in the dataset.</em></p>
+                <p>Now drag the <b>Country</b> pill over to the line next to <b>Rows</b>. It will list the Countries we selected during filtering. Under <b>Marks</b>, change the drop-down selection from <b>Automatic</b> to <b>Shapes</b>.</p>
+                <p img src="img/tableau-shapesmarks.png"></p>
+                <p>Now, we will assign flags to each country. On the right, there is a key showing the shape for each country. Select the arrow pointing down next to <b>Country</b> then select <b>Edit Shapes</b>.</p>
+                <p>In the new window, change the drop-down to Countries.</p>
+                <p><img src="img/tableau-countriesicons.png"></p>
+                
+                <p>This is the file you saved to your computer earlier. If you want to add custom icons in Tableau, you must save them in the <code>Shapes</code> folder in <code>My Tableau Repository</code>. Go ahead and assign each country their flag by clicking on the country and then the associated flag. Then press Okay.</p>
+                <p>The last change we will make will be to increase the size of the flags. Do this by clicking on <b>Size</b> in the <b>Marks</b> area and then slide to almost the very end. Don't worry about the shapes overlapping because they will be displayed separately elsewhere.</p>
+                
+                
+                <h3>Chart 2: BMI by country</h3>
+                <p>Let's plot a map showing how high or low each country's BMIs are. </p>
+                <p>Drag the <b>Country</b> pill onto the open area in the middle, and a map should appear with a dot on each country with data. Next, drag the <b>BMI</b> pill to <b>Color</b> in the Marks area. Change the Measure for BMI from Sum to Average.</p>
+                <p><img src="img/tableau-chart1-step1.png"></p>
+                <p>This will color the map according to BMI. Let's edit the colors by clicking the arrow pointing down next to the <b>AVG(BMI)</b> color scale on the right. Adjust the settings to be Stepped Color with 4 steps. Then press the <b>&lt;&lt; Advanced</b> button to then change the Start and End to 21 and 28. Then press <b>Apply</b> to see your changes. See the settings in the image below:</p>
+                <p><img src="img/tableau-mapcolors.png"></p>
+                <p>Next, add a filter by dragging the <b>Sex</b> pill onto the <b>Filters</b> area, selecting All, and pressing okay. Then click the arrow pointing down on that pill and choose "Show Filter." The filter will then be shown on the left. Click the arrow pointing down next to Sex on that filter and change it from a <b>Multiple Values (list)</b> to a <b>Single Value (list)</b>.</p>
+                Now, we are going to give the chart a title by double-clicking on the text "Sheet 2" in the tab at the bottom and typing in the following: <em>Average BMI by Country</em>.
+                
+                <h3>Charts 2 & 3: BMIs in North America and the West Indies</h3>
+                <p>Duplicate that first sheet two times by right-clicking the sheet and pressing <b>Duplicate</b>. Title these new sheets <em>Average BMIs of North America</em> and <em>Average BMIs of the Greater Antilles</em> respectively.</p>
+                <p>For the North America chart, we will limit to those countries by dragging the <b>Country</b> pill to the Filters area and select Canada, Mexico, and the United States of America by pressing <b>None</b> and then checking the appropriate boxes.</p>
+                <p><img src="img/tableau-countryfilter.png"></p>
+                <p>Repeat these steps for the Greater Antilles chart, but instead select Cuba, Dominican Republic, Haiti, and Jamaica.</p>
+                
+                <h3>Charts 5 & 6: BMI trends by region</h3>
+                <p>Next, we are going to create line charts for both regions (North America and Greater Antilles).</p>
+                <p>I recommend making one first, then duplicating it and changing the filtered countries. Let's start with the United States. Click the icon of a bar chart with a plus sign in front of it at the bottom of the application. That will create a new sheet.</p>
+                <p>Filter by country, selecting Canada, Mexico, and the United States of America. Next, drag the <b>Year</b> pill up to the <b>Columns</b> area. Drag the <b>BMI</b> pill up to the <b>Rows</b> area. Change BMI measure from Sum to Average.</p>
+                <p><img src="img/tableau-averageBMI.png"></p>
+                <p>Lastly, you will drag the <b>Country</b> pill onto the line chart, and that will create a line for each country.</p>
+                
+                <h4>Editing the Tooltip</h4>
+                <p>Let's add our flags to the tooltip (information that is revealed when you hover over the chart.)</p>
+                <p>To do this click on the <b>Tooltip</b> button in the <b>Marks</b> area.</p>
+                <p>Then we will highlight the text that says <em>Country: &lt;Country&gt;</em>. Click on <code>Insert-&gt;Sheets-&gt;Sheet 1</code>.</p>
+                <p><img src="img/tableau-insertsheet.png"></p>
+                <p>Selecting to add that sheet will add the following text to your tooltip editor: <code>&lt;Sheet name="Sheet 1" maxwidth="300" maxheight="300" filter="&lt;All Fields&gt;"&gt;</code>. Press Okay.</p>
+                <p>Now, when you highlight over information about a country, the flag will appear.</p>
+                <p>&nbsp;</p>
+                <strong>Duplicate this chart and then change the countries in the filter to Cuba, Dominican, Republic, Haiti, and Jamaica.</strong>
+                <p>&nbsp;</p>
+                
+                <h3>Charts 7 & 8: Highest and Lowest BMIs</h3>
+                <p>Let's create a table with the countries with the highest BMIs and a table with the countries with the lowest BMIs.</p>
+                <p>Click the icon to add a sheet at the bottom right of the tabs. Then drag <b>Country</b> to Rows. Next, drag BMI into the section with the repeating ABCs in the table. Then press the <b>Sort</b> icon in the top menu. Count the first ten countries and select the eleventh all the way to the bottom. Right-click your selection and then press <b>Exclude</b>. Now you have the top 10 most heavy countries. Rename your sheet to describe your table.</p>
+                
+                <p>Duplicate the sheet to create another table. This time, you will remove the <b>Country</b> pill from the Filters area to show all of the countries again. Now, press Sort again to sort it in the opposite direction. Once again, count the first ten countries and select the eleventh all the way to the bottom. Right-click your selection and then press <b>Exclude</b>. Now you have the top 10 least heaviest countries. Rename your sheet to describe your table.</p>
+                
+                <h2>Creating a Dashboard</h2>
+                <p>To create a new dashboard, select the icon in the bottom right of the tabs that shows four squares with a plus sign.</p>
+                <p>On the left, you will see the charts you made. You can highlight your mouse over it to see a preview of the chart. Then drag the chart you would like to add onto the dashboard (big open white space).</p>
+                <p>The first chart will fill the whitespace. Then, as you add charts, they will divide up the area. Your filters and keys will come along with the chart.</p>
+                <p>Create two dashboards, one with the global BMIs and the tables and one with the two charts for North America and the two charts for the Greater Antilles.</p>
+                
+                <h2>Creating a Story</h2>
+                <p>To create a story, we select the icon that looks like an open book with a plus sign. Like the dashboards, your elements will appear on the left. To add elements onto the working area in the middle, double-click them. This time, you will add your two dashboards. Add a caption to the box at the top. </p>
+                
+                <h1>Publishing to Tableau Public</h1>
+                <p>To share your data discoveries with the world, you can save your workbook to Tableau Public, a free cloud service. On Tableau Public, anyone can interact with your views, or download your workbooks or data sources. For information, go to the <a href="http://public.tableau.com/" title="Tableau Public web site" alt="Tableau Public web site">Tableau Public website</a>. </p>
+        <h3>Save your story</h3>
+        <ol>
+            <li value="1">
+                <p>With your story open in Tableau Public, select <span class="uicontrol">File</span>  &gt; <span class="uicontrol">Save to Tableau Public</span>. </p>
+   
+            </li>
+            <li value="2">
+                <p>Sign in using your Tableau Public account.</p>
+                <p>
+                    <img src="img/save_public2.png" />
+                </p>
+                <p>If you don’t have an account, select the link to create a new one.</p>
+            </li>
+            <li value="3">
+                <p>Type a name for the story and click <span class="uicontrol">Save</span>.</p>
+                <p>When you save a workbook to Tableau Public, the publishing process creates an extract of the data connection.</p>
+                <p class="note">
+                    <strong>Tip:</strong> The title becomes part of your view’s metadata. Use a unique title that will help others find it when they search. 
+                </p>
+                <p>After the workbook is published, you are redirected to your account on the <a href="https://public.tableau.com/s/" target="_blank">Tableau Public website</a>.</p>
+            </li>
+        </ol>
+        <p>On your profile page on Tableau Public, do any of the following to customize your profile:</p>
+        <ul>
+            <li value="1">
+                <p>Hover the pointer over a viz to get access to actions such as selecting it as your featured viz, or hiding, downloading, or deleting it.</p>
+            </li>
+            <li value="2">
+                <p>Hover the pointer over a viz and then select <span class="uicontrol">View</span> to open the viz’s home page. There you can select <span class="uicontrol">Edit Details</span> to customize metadata such as workbook name and description, add a permalink, and change other settings.</p>
+            </li>
+            <li value="3">
+                <p>To get a link to share on social media or code to embed in a web page, display a view, and then click <span class="uicontrol">Share</span> at the bottom of the view. (You can get links and embed code for other Tableau Public users’ views this way, too.)</p>
+            </li>
+        </ul>
+        <p> </p>
+
         </div>
-        
     
 <hr/>
 
